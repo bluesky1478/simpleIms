@@ -1,0 +1,1088 @@
+/* ─── Swal2 Text area custom css ───────────────────────────────────────── */
+.custom-swal-textarea {
+    width: 500px !important;
+    height: 150px !important;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ─── Compact 버튼 ───────────────────────────────────────── */
+
+.mini-btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    font-size: 11px;
+    font-weight: 500;
+    color: #4b5563;
+
+    padding: 2px 6px;
+    height: 20px;
+
+    background: #f9f9f9;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+/* 아이콘 */
+.mini-btn-toggle::before {
+    content: "⯆";
+    font-size: 9px;
+    color: #6b7280;
+}
+.mini-btn-toggle-upper::before {
+    content: "▲";
+}
+
+/* Hover */
+.mini-btn-toggle:hover {
+    background: #e5e7eb;
+    border-color: #cbd5e1;
+    color: #374151;
+}
+
+/* Active */
+.mini-btn-toggle:active {
+    background: #e2e8f0;
+}
+
+/* Focus (접근성용, 과하지 않게) */
+.mini-btn-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(148,163,184,0.3);
+}
+
+/* ─── Compact 테이블 ───────────────────────────────────────── */
+
+/* 전체 테이블 공통 */
+.ims-table-compact {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;              /* 칼럼 폭 균일 + 말줄임 처리에 유리 */
+
+    font-size: 12px;                  /* 작게 */
+    color: #111827;
+    background-color: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;                 /* 둥근 모서리 적용 */
+}
+
+/* 헤더 */
+.ims-table-compact thead {
+    background: linear-gradient(135deg, #f9fafb, #e5e7eb);
+}
+.ims-table-compact th {
+    padding: 6px 8px;
+    font-weight: 600;
+    text-align: left;
+    color: #374151;
+    border-bottom: 1px solid #d1d5db;
+
+    white-space: nowrap;
+}
+
+/* 바디 */
+.ims-table-compact td {
+    padding: 4px 8px;                 /* 최대한 컴팩트하게 */
+    border-bottom: 1px solid #f3f4f6;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;          /* 길면 … 처리 */
+}
+
+/* 줄무늬 + 호버 */
+.ims-table-compact tbody tr:nth-child(odd) {
+    background-color: #f9fafb;
+}
+.ims-table-compact tbody tr:hover {
+    background-color: #eff6ff;
+}
+
+/* 첫/마지막 컬럼 살짝 여유 */
+.ims-table-compact th:first-child,
+.ims-table-compact td:first-child {
+    padding-left: 10px;
+}
+.ims-table-compact th:last-child,
+.ims-table-compact td:last-child {
+    padding-right: 10px;
+}
+
+/* ─── Compact Vertical 테이블 ───────────────────────────────────────── */
+.ims-vtable {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+
+    font-size: 12px;
+    color: #111827;
+    overflow: hidden;
+}
+
+/* row */
+.ims-vrow {
+    display: flex;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.ims-vrow:last-child {
+    border-bottom: none;
+}
+
+/* 라벨(left) */
+.ims-vlabel {
+    flex: 0 0 100px;
+    padding: 6px 10px;
+
+    background: #f3f4f6;       /* 옅은 회색 배경 */
+    font-weight: 600;
+    color: #374151;
+
+    border-right: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+/* 값(right) */
+.ims-vvalue {
+    flex: 1;
+    padding: 6px 10px;
+    color: #1f2937;
+    overflow-wrap: break-word;
+}
+
+/* Hover */
+.ims-vrow:hover .ims-vvalue {
+    background: #f9fafb;
+}
+
+/* ─── 세로형 2col ───────────────────────────────────────── */
+
+/* 전체 박스 */
+.ims-vtable-2col {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* 2단 구성 */
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+
+    font-size: 12px;
+    color: #111827;
+}
+
+/* 개별 셀 */
+.ims-vcell {
+    display: flex;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.ims-vcell:nth-child(2n) {
+    border-left: 1px solid #e5e7eb;
+}
+
+/* 라벨 */
+.ims-vlabel {
+    flex: 0 0 90px;
+    padding: 6px 10px;
+    background: #f3f4f6;          /* 옅은 회색 */
+    font-weight: 600;
+    color: #374151;
+    border-right: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+/* 값 */
+.ims-vvalue {
+    flex: 1;
+    padding: 6px 10px;
+    color: #1f2937;
+    overflow-wrap: break-word;
+}
+
+/* hover 효과 (값 부분만) */
+.ims-vcell:hover .ims-vvalue {
+    background: #f9fafb;
+}
+
+/* ─── 복합 테이블 (샘플 참조) ───────────────────────────────────────── */
+.quote-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 12px;
+    color: #111827;
+    background: #ffffff;
+    border: 1px solid #d4d4d8;
+}
+
+/* 열 폭 */
+.col-label {
+    width: 110px;
+}
+.col-block {
+    width: calc((100% - 110px) / 3);
+}
+
+/* 공통 셀 */
+.quote-compare-table th,
+.quote-compare-table td {
+    border: 1px solid #e5e7eb;
+    padding: 4px 6px;
+    vertical-align: middle;
+}
+
+/* 왼쪽 구분 칼럼 */
+.th-label {
+    background: #f3f4f6;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* 시나리오 헤더 블록 */
+.th-block {
+    padding: 4px 6px;
+    text-align: left;
+    background: #fafafa;
+}
+.th-title {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 1.3;
+    margin-bottom: 4px;
+}
+.th-qty {
+    font-size: 11px;
+    color: #4b5563;
+}
+
+/* 두 번째 줄 가상의 구분선 */
+.th-divider-row th {
+    height: 8px;
+    padding: 0;
+    background: #ffffff;
+    border-top: 1px solid #d4d4d8;
+    border-bottom: 1px solid #d4d4d8;
+}
+
+/* 판매가/견적가/마진 헤더 */
+.th-sub-row th {
+    background: #f3f4f6;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* 왼쪽 라벨(본문) */
+.row-label {
+    background: #f9fafb;
+    font-weight: 600;
+    text-align: left;
+}
+.row-label--sub {
+    font-weight: 500;
+    font-size: 11px;
+    color: #4b5563;
+}
+
+/* 숫자 정렬 */
+.t-right {
+    text-align: right;
+}
+
+/* 가격 변화 표시 */
+.price-down {
+    color: #1d4ed8;
+    font-size: 11px;
+    margin-left: 4px;
+}
+.price-up {
+    color: #b91c1c;
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+/* 행 hover */
+.quote-compare-table tbody tr:hover {
+    background: #f9fafb;
+}
+.quote-compare-table tbody tr:hover .row-label {
+    background: #e5e7eb;
+}
+
+/* 너무 길 때 말줄임이 필요하면 추가
+.quote-compare-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+*/
+
+
+
+/* ─── 카드 레이아웃 ───────────────────────────────────────── */
+
+/* 카드들을 가로로 나열 */
+.quote-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: flex-start;
+}
+
+/* ----- 카드 박스 ----- */
+.quote-card {
+    width: 360px;
+    background: #ffffff;
+    border-radius: 10px;                /* 라운드 */
+    border: 1px solid #e5e7eb;          /* 밝은 회색 테두리 */
+    padding: 12px 14px 14px;
+    font-size: 12px;
+    color: #111827;
+    box-sizing: border-box;
+
+    /* 은은한 그림자 */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05),
+    0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* ----- 카드 상단 제목 ----- */
+.quote-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.quote-card__title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #1f2937;
+}
+
+.quote-card__tag {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+/* ----- 메모 영역 ----- */
+.quote-card__note {
+    font-size: 11px;
+    color: #374151;
+    margin: 2px 0 4px;
+    /*white-space: pre-line;*/
+    line-height: 1.35;
+    background: #f9fafb;                 /* 부드러운 회색 박스 */
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #f3f4f6;
+}
+
+/* ----- 기본 테이블 공통 ----- */
+.quote-main-table,
+.quote-section-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+}
+
+.quote-main-table th,
+.quote-main-table td,
+.quote-section-table th,
+.quote-section-table td {
+    border: 1px solid #e5e7eb;
+    padding: 5px 6px;
+    font-size: 11px;
+}
+
+/* ----- 메인 2열 테이블 ----- */
+.quote-main-table th {
+    /*width: 25%;*/
+    background: #f3f4f6;
+    font-weight: 600;
+    color: #374151;
+}
+
+.quote-main-table td {
+    /*width: 25%;*/
+    color: #1f2937;
+}
+
+/* ----- 원단/부자재 섹션 ----- */
+.q-sec-title {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.q-sec-total {
+    margin-left: 6px;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.q-sec-head {
+    background: #f3f4f6;
+    font-weight: 600;
+    color: #374151;
+    text-align: center;
+}
+
+/* ----- 토글 라인(▼ 전체) ----- */
+.q-toggle-row {
+    text-align: center;
+    padding: 6px 0;
+    cursor: pointer;
+    color: #2563eb;                     /* 모던한 파란색 */
+    font-weight: 500;
+    user-select: none;
+}
+
+.q-toggle-row:hover {
+    background: #f3f4f6;
+}
+
+/* ----- 정렬 유틸 ----- */
+.t-right { text-align: right; }
+.t-center { text-align: center; }
+
+
+/* ─── 툴팁 ───────────────────────────────────────── */
+
+.ims-tt {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /*cursor: help*/;
+}
+
+/* 툴팁 박스 */
+.ims-tt .ims-tt-box {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%) translateY(6px);
+
+    display: inline-block;
+    width: max-content;
+    max-width: 360px;
+    padding: 10px 12px;
+
+    background: rgba(20, 20, 20, 0.92);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.4;
+
+    border-radius: 10px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.22);
+    backdrop-filter: blur(6px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+    white-space: normal;
+    z-index: 9999;
+}
+
+/* 화살표 */
+.ims-tt .ims-tt-box::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: rgba(20, 20, 20, 0.92);
+}
+
+/* hover 시 표시 */
+.ims-tt:hover .ims-tt-box {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.ims-tt.ims-tt-right .ims-tt-box {
+    left: auto;
+    right: 0;
+    transform: translateY(6px);
+}
+.ims-tt.ims-tt-right:hover .ims-tt-box {
+    transform: translateY(0);
+}
+.ims-tt.ims-tt-right .ims-tt-box::after {
+    left: auto;
+    right: 14px;
+    transform: none;
+}
+
+
+/* 왼쪽 정렬 – 트리거 안 가리게 충분히 이동 */
+.ims-tt.ims-tt-left .ims-tt-box {
+    left: auto;
+    right: calc(100% + 14px);   /* 🔥 트리거에서 더 떨어뜨림 */
+    bottom: 50%;
+    transform: translateY(50%) translateX(-10px);
+}
+
+.ims-tt.ims-tt-left:hover .ims-tt-box {
+    transform: translateY(50%) translateX(0);
+}
+
+/* 화살표 (왼쪽 방향) */
+.ims-tt.ims-tt-left .ims-tt-box::after {
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    border: 7px solid transparent;
+    border-left-color: rgba(20, 20, 20, 0.92);
+}
+
+
+/* Light theme */
+.ims-tt.ims-tt-light .ims-tt-box {
+    background: #ffffff;
+    color: #222;
+    border: 1px solid #e3e3e3;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+.ims-tt.ims-tt-light .ims-tt-box::after {
+    border-top-color: #ffffff;
+}
+
+/* left 방향 화살표 */
+.ims-tt.ims-tt-light.ims-tt-left .ims-tt-box::after {
+    border-left-color: #ffffff;
+}
+
+
+/* 전체 래퍼 */
+.ims-fab{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 9999;
+    font-size: 13px;
+}
+
+.ims-fab-toggle{ display:none; }
+
+/* 배경(열렸을 때 바깥 눌러 닫기) */
+.ims-fab-backdrop{
+    position: fixed;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* 버튼 */
+.ims-fab-btn{
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(24,24,24,.95);
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(0,0,0,.22);
+    cursor: pointer;
+    user-select: none;
+}
+
+.ims-fab-plus{
+    font-size: 26px;
+    line-height: 1;
+    transition: transform .18s ease;
+}
+
+/* 우측 플로팅 메뉴 */
+/* 메뉴 */
+/* ===== Floating Wrapper ===== */
+.ims-fab2{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 99999;        /* ✅ 다른 요소에 묻히지 않게 */
+    font-size: 13px;
+}
+
+/* ✅ hover 끊김 방지용 "브릿지" (버튼~메뉴 사이 공백 커버) */
+.ims-fab2::before{
+    content:"";
+    position: absolute;
+    right: 0;
+    bottom: 56px;         /* 버튼 높이와 맞춤 */
+    width: 260px;         /* 메뉴 폭보다 넉넉히 */
+    height: 34px;         /* 이동 경로 커버 */
+    background: transparent;
+}
+
+/* ===== Menu (Hidden by default) ===== */
+.ims-fab2-menu{
+    position: absolute;
+    right: 0;
+    bottom: 62px;         /* 버튼 위로 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(.98);
+    transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+    pointer-events: none;
+}
+
+/* ✅ Menu Panel (Rounded box) */
+.ims-fab2-panel{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    padding: 8px;
+    border-radius: 16px;
+
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(0,0,0,.08);
+    box-shadow:
+            0 18px 40px rgba(0,0,0,.18),
+            0 2px 6px rgba(0,0,0,.08);
+}
+
+/* Menu Items */
+.ims-fab2-item{
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 12px;
+    border-radius: 10px;
+
+    color: #222;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: background .12s ease, transform .12s ease;
+}
+
+.ims-fab2-item:hover{
+    background: rgba(0,0,0,.06);
+    transform: translateX(-2px);
+}
+
+/* ===== Button ===== */
+.ims-fab2-btn{
+    width: 56px;
+    height: 56px;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /*background: linear-gradient(180deg, rgba(35,35,35,.98), rgba(12,12,12,.98));*/
+    background-color: #000;
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(0,0,0,.25);
+
+    transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+.ims-fab2-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(0,0,0,.30);
+    filter: brightness(1.05);
+}
+
+/* + icon (perfect center) */
+.ims-fab2-plus{
+    position: relative;
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.ims-fab2-plus::before,
+.ims-fab2-plus::after{
+    content:"";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    border-radius: 999px;
+    transform: translate(-50%, -50%);
+}
+
+.ims-fab2-plus::after{
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* ===== Hover to open ===== */
+.ims-fab2:hover .ims-fab2-menu{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* open action: plus rotate */
+.ims-fab2:hover .ims-fab2-plus{
+    transform: rotate(45deg);
+    transition: transform .18s ease;
+}
+
+
+/* ─── Modern 버튼 ───────────────────────────────────────── */
+/* layout (선택) */
+.ims-btn-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+/* base button (compact) */
+.ims-btn{
+    --bg: #64748b;
+    --bg2:#475569;
+    --ring: rgba(99,102,241,.32);
+    --text:#ffffff;
+
+    appearance:none;
+    border:0;
+    border-radius: 12px;     /* ↓ 14 -> 12 */
+    padding: 9px 12px;       /* ↓ */
+    min-height: 38px;        /* ↓ 44 -> 38 */
+    font-size: 14px;         /* 추가: 컴팩트 */
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: .1px;
+    color: var(--text);
+    cursor: pointer;
+
+    background: linear-gradient(
+            135deg,
+            color-mix(in oklab, var(--bg) 92%, #fff 8%),
+            var(--bg2)
+    );
+
+    box-shadow:
+            0 8px 18px color-mix(in srgb, var(--bg) 16%, transparent), /* ↓ */
+            inset 0 1px 0 rgba(255,255,255,.20);
+    transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
+    user-select:none;
+}
+
+.ims-btn:hover{
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+    box-shadow:
+            0 10px 22px color-mix(in srgb, var(--bg) 18%, transparent),
+            inset 0 1px 0 rgba(255,255,255,.24);
+}
+
+.ims-btn:active{
+    transform: translateY(1px);
+    box-shadow:
+            0 6px 14px color-mix(in srgb, var(--bg) 16%, transparent),
+            inset 0 2px 6px rgba(0,0,0,.16);
+}
+
+.ims-btn:focus-visible{
+    outline: none;
+    box-shadow:
+            0 10px 22px color-mix(in srgb, var(--bg) 18%, transparent),
+            inset 0 1px 0 rgba(255,255,255,.24),
+            0 0 0 3px var(--ring); /* ↓ 4 -> 3 */
+}
+
+.ims-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+    filter:saturate(.7);
+}
+
+/* variants */
+.ims-btn--prev{ --bg:#0ea5e9; --bg2:#0284c7; --ring: rgba(14,165,233,.32); }
+.ims-btn--next{ --bg:#22c55e; --bg2:#16a34a; --ring: rgba(34,197,94,.32); }
+.ims-btn--danger{ --bg:#ef4444; --bg2:#dc2626; --ring: rgba(239,68,68,.32); }
+.ims-btn--hold{ --bg:#f59e0b; --bg2:#d97706; --ring: rgba(245,158,11,.34); }
+
+
+
+/* ─── 작은 모던 아웃라인 버튼 버튼 ───────────────────────────────────────── */
+.ims-mini-btn{
+    --bd: rgba(15, 23, 42, .18);
+    --txt: #0f172a;
+    --bg: rgba(255,255,255,.9);
+    --hoverBg: rgba(15, 23, 42, .04);
+    --ring: rgba(59,130,246,.28);
+
+    appearance:none;
+    border: 1px solid #d1d1d1;
+    background: var(--bg);
+    /*color: var(--txt);*/
+    cursor: pointer;
+
+    padding: 3px 5px;     /* 작게 */
+    min-height: 14px;      /* 작게 */
+    border-radius: 5px;   /* 살짝 라운드 */
+    font-size: 10px;
+    /*font-weight: 700;*/
+    line-height: 1;
+
+    box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+    transition: background-color .14s ease, border-color .14s ease,
+    box-shadow .14s ease, transform .14s ease;
+}
+
+.ims-mini-btn:hover{
+    background: var(--hoverBg);
+    border-color: rgba(15, 23, 42, .26);
+}
+
+.ims-mini-btn:active{
+    transform: translateY(1px);
+    background: rgba(15, 23, 42, .06);
+}
+
+.ims-mini-btn:focus-visible{
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.ims-mini-btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+/* 옵션: 링크 느낌(블루 포인트) */
+.ims-mini-btn--ghost{
+    --txt: #1d4ed8;
+    --bd: rgba(29, 78, 216, .28);
+    --hoverBg: rgba(29, 78, 216, .06);
+    --ring: rgba(29, 78, 216, .28);
+}
+
+.ims-mini-btn.ims-mini-btn-gray { background-color:#f1f1f1 }
+
+
+
+
+/* ─── 좌측 상단 네모 배지 ───────────────────────────────────────── */
+.ims-corner-badge{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    width: 15px;
+    height: 15px;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1;
+
+    /* 기본: 남색계열 */
+    background: #e8f0ff;
+    color: #1e3a8a;
+
+    box-shadow: 0 2px 8px rgba(30,58,138,.18);
+}
+
+/* 노랑 계열 */
+.ims-corner-badge--yellow{
+    background: #fff7d6;
+    color: #92400e;
+    box-shadow: 0 2px 8px rgba(146,64,14,.18);
+}
+
+/* 녹색 계열 */
+.ims-corner-badge--green{
+    background: #e8f5e9;
+    color: #1b5e20;
+    box-shadow: 0 2px 8px rgba(27,94,32,.18);
+}
+
+
+
+/* ─── 심플 테이블  ───────────────────────────────────────── */
+
+.ims-simple-table {
+    /*width: 100%;*/
+    border-collapse: collapse; /* 선 겹침 방지 */
+    margin: 10px 0;
+}
+
+.ims-simple-table th,
+.ims-simple-table td {
+    padding: 10px 12px;
+    text-align: left;
+    /* 얇은 회색 하단 선 */
+    border-bottom: 1px solid #eeeeee;
+    color: #444;
+}
+
+.ims-simple-table thead th {
+    background-color: #fafafa;
+    font-weight: 500;
+    color: #666;
+    border-top: 1px solid #eeeeee; /* 상단 닫기 */
+}
+
+/* 마지막 줄은 선을 없애거나 더 진하게 처리 가능 */
+.ims-simple-table tbody tr:last-child td {
+    border-bottom: 1px solid #eeeeee;
+}
+
+/* 마우스 오버 시 미세한 배경색 변화 */
+.ims-simple-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+
+
+
+/* ─── 모던 버튼 ───────────────────────────────────────── */
+
+/* 버튼들을 감싸는 컨테이너 (간격 조절) */
+.ims-btn-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* 버튼 사이 간격 */
+}
+
+/* 1. 공통 버튼 베이스 (작고 심플하게) */
+.ims-s-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;        /* 상하 4px, 좌우 10px로 슬림하게 */
+    font-size: 12px;          /* 글자 크기 작게 */
+    font-weight: 600;         /* 글자 적당히 굵게 */
+    line-height: 1.2;
+    border-radius: 4px;       /* 모서리 둥글게 (부드러운 느낌) */
+    cursor: pointer;
+    transition: all 0.2s ease; /* 호버 시 부드러운 효과 */
+    outline: none;
+    height: 26px;             /* 높이 고정 (다른 인풋창들과 라인 맞추기 용이) */
+}
+
+/* 아이콘과 텍스트 사이 간격 */
+.ims-s-btn i {
+    margin-right: 4px;
+    font-size: 11px;
+}
+
+/* 2. 흰색 버튼 스타일 (+ 추가) */
+.ims-s-btn-white {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db; /* 연한 회색 테두리 */
+    color: #374151;            /* 진한 회색 글자 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 아주 미세한 그림자 */
+}
+
+.ims-s-btn-white:hover {
+    background-color: #f9fafb; /* 호버 시 아주 연한 회색 */
+    border-color: #9ca3af;     /* 테두리 조금 진하게 */
+    color: #111827;
+}
+
+.ims-s-btn-white:active {
+    background-color: #f3f4f6;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.05); /* 눌린 효과 */
+}
+
+.ims-s-btn-blue {
+    background-color: #1c5bba;
+    border: 1px solid #1c5bba;
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.ims-s-btn-blue:hover {
+    background-color: #164996; /* 호버 시 조금 더 어두운 블루 */
+    border-color: #164996;
+}
+
+.ims-s-btn-blue:active {
+    background-color: #113a7a;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); /* 눌린 효과 */
+}
+
+/* 아웃라인 스타이 */
+.ims-s-btn-blue-outline {
+    background-color: #fff;
+    border: 1px solid #1c5bba; /* 테두리는 기존 파란색 유지 */
+    color: #1c5bba;            /* 글자색도 파란색으로 변경 */
+    box-shadow: 0 1px 2px rgba(28, 91, 186, 0.05);
+}
+
+.ims-s-btn-blue-outline:hover {
+    background-color: #1c5bba; /* 호버 시 다시 꽉 찬 파란색으로 반전 */
+    border-color: #1c5bba;
+    color: #ffffff;            /* 글자는 흰색으로 */
+}
+
+.ims-s-btn-blue-outline:active {
+    background-color: #164996;
+    border-color: #164996;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+
+/* ─── 프리로더 ───────────────────────────────────────── */
+
+/* 컨테이너: 중앙 정렬용 */
+.ims-loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* 프리로더 본체: 얇은 회색 선 스타일 */
+.ims-pure-loader {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #f3f3f3; /* 매우 연한 바탕선 */
+    border-top: 2px solid #c0c0c0; /* 조금 더 진한 회색 포인트 */
+    border-radius: 50%;
+    animation: ims-spin 0.8s linear infinite;
+}
+
+/* 텍스트 스타일 (선택사항) */
+.ims-loader-text {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #999;
+    letter-spacing: -0.5px;
+}
+
+/* 애니메이션 네이밍 충돌 방지 */
+@keyframes ims-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,37 @@
+UPDATE sl_imsProjectProduct
+SET -- prdExQty = 0,
+    -- salePrice = 0,
+    currentPrice = salePrice,
+    targetPrice = salePrice,
+    targetPrdCost = estimateCost,
+    -- estimateCost = 0,
+    prdCost = 0,
+    -- fabricStatus = 0,
+    -- fabricNational = 0,
+    -- btStatus = 0,
+    -- fabricCount = 0,
+    -- btCount = 0,
+    sampleConfirmSno = 0,
+
+    prdCostConfirmSno = 0,
+    prdCostConfirmManagerSno = 0,
+    prdCostConfirmDt = '',
+/*
+    estimateConfirmSno = 0,
+    estimateConfirmManagerSno = 0,
+    estimateConfirmDt = '',
+    estimateStatus = 0,
+ */
+    inlineStatus = 0,
+    inlineMemo = '',
+    assortStatus = 0,
+    workStatus = 0,
+    productionStatus=0,
+    priceConfirm = 'n',
+    priceConfirmDt = '',
+    customerDeliveryDt = '',
+    msDeliveryDt = '',
+    produceCompanySno=0,
+    produceType=0
+WHERE delFl = 'n'
+  AND projectSno =

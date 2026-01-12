@@ -1,0 +1,184 @@
+<?php
+namespace Component\Scm;
+
+use App;
+use Component\Ims\ImsCodeMap;
+use Component\Ims\ImsDBName;
+use Session;
+use Component\Database\DBTableField;
+use Component\Member\Manager;
+use Framework\Utility\DateTimeUtils;
+use LogHandler;
+use Request;
+use Exception;
+use Framework\Debug\Exception\AlertBackException;
+use SiteLabUtil\FileUtil;
+use SiteLabUtil\SlCommonUtil;
+use SlComponent\Database\DBUtil;
+use SlComponent\Database\DBUtil2;
+use SlComponent\Database\SearchVo;
+use SlComponent\Database\TableVo;
+use SlComponent\Util\ExcelCsvUtil;
+use SlComponent\Util\PhpExcelUtil;
+use SlComponent\Util\SitelabLogger;
+use SlComponent\Util\SlCodeMap;
+use SlComponent\Util\SlCommonTrait;
+use SlComponent\Util\SlKakaoUtil;
+use SlComponent\Util\SlLoader;
+use Component\Mail\MailAutoObserver;
+use Component\Godo\NaverPayAPI;
+use Component\Member\Member;
+use Component\Naver\NaverPay;
+use Component\Delivery\OverseasDelivery;
+use Component\Deposit\Deposit;
+use Component\ExchangeRate\ExchangeRate;
+use Component\Mail\MailMimeAuto;
+use Component\Mall\Mall;
+use Component\Mall\MallDAO;
+use Component\Member\Util\MemberUtil;
+use Component\Mileage\Mileage;
+use Component\Policy\Policy;
+use Component\Sms\Code;
+use Component\Sms\SmsAuto;
+use Component\Sms\SmsAutoCode;
+use Component\Sms\SmsAutoObserver;
+use Component\Validator\Validator;
+use Component\Goods\SmsStock;
+use Component\Goods\KakaoAlimStock;
+use Component\Goods\MailStock;
+use Encryptor;
+use Framework\Application\Bootstrap\Log;
+use Framework\Debug\Exception\AlertOnlyException;
+use Framework\Debug\Exception\AlertRedirectException;
+use Framework\Helper\MallHelper;
+use Framework\Utility\ArrayUtils;
+use Framework\Utility\ComponentUtils;
+use Framework\Utility\NumberUtils;
+use Framework\Utility\StringUtils;
+use Framework\Utility\UrlUtils;
+use Globals;
+use Logger;
+use Framework\Utility\KafkaUtils;
+use SlComponent\Util\SlSmsUtil;
+use Framework\Security\Digester;
+use Framework\Utility\GodoUtils;
+
+/**
+ * 아시아나 서비스
+ * Class GoodsStock
+ * @package Component\Goods
+ */
+class AlterCodeMap {
+
+    const ALTER_CODE = [
+        //아시아나
+        //하계면티(반팔)
+        'SSAAPPO85'=>'25SSAAPPO85',
+        'SSAAPPO90'=>'25SSAAPPO90',
+        'SSAAPPO95'=>'25SSAAPPO95','SSAAPPO100'=>'25SSAAPPO100','SSAAPPO105'=>'25SSAAPPO105','SSAAPPO110'=>'25SSAAPPO110','SSAAPPO115'=>'25SSAAPPO115','SSAAPPO120'=>'25SSAAPPO120','SSAAPPO125'=>'25SSAAPPO125','SSAAPPO130'=>'25SSAAPPO130',
+        //하복상의
+        'SSAAPJKS'=>'25SSAAPJK90','SSAAPJKM'=>'25SSAAPJK95','SSAAPJKL'=>'25SSAAPJK100','SSAAPJKXL'=>'25SSAAPJK105','SSAAPJK2XL'=>'25SSAAPJK110','SSAAPJK3XL'=>'25SSAAPJK115','SSAAPJK4XL'=>'25SSAAPJK120','SSAAPJK5XL'=>'25SSAAPJK125','SSAAPJK6XL'=>'25SSAAPJK130',
+
+        //하작업모
+        'AAPSSCAPM'=>'25SSAAPCPM',
+        'AAPSSCAPL'=>'25SSAAPCPL',
+
+
+        //-- CHECK 1
+        //긴팔
+        'SSAAPPO290'=>'25SSAAPPOL90','SSAAPPO295'=>'25SSAAPPOL95','SSAAPPO2100'=>'25SSAAPPOL100','SSAAPPO2105'=>'25SSAAPPOL105','SSAAPPO2110'=>'25SSAAPPOL110','SSAAPPO2115'=>'25SSAAPPOL115','SSAAPPO2120'=>'25SSAAPPOL120','SSAAPPO2125'=>'25SSAAPPOL125','SSAAPPO2130'=>'25SSAAPPOL130',
+        'AAPVEY'=>'25SSAAPVENE', //안전조끼(안전)
+        'AAPVEBN'=>'25SSAAPVEBN', //안전조끼(검수)
+        'AAPVEN'=>'25SSAAPVENA',  //안전조끼(AM)
+        'AAPVEON'=>'25SSAAPVEON', //안전조끼(F/S)
+        'AAPVERN'=>'25SSAAPVERN', //안전조끼(신입)
+        //우의
+        'AAPRCS' => '25ALLAAPRCS', 'AAPRCM' => '25ALLAAPRCM', 'AAPRCL' => '25ALLAAPRCL', 'AAPRCXL' => '25ALLAAPRCXL',
+        'AAPRC2XL' => '25ALLAAPRC2XL','AAPRC3XL' => '25ALLAAPRC3XL','AAPRC4XL' => '25ALLAAPRC4XL','AAPRC5XL' => '25ALLAAPRC5XL',
+        //하복하의
+        'SSAAPPT28'=>'25SSAAPPT28', 'SSAAPPT30'=>'25SSAAPPT30', 'SSAAPPT32'=>'25SSAAPPT32', 'SSAAPPT34'=>'25SSAAPPT34', 'SSAAPPT36'=>'25SSAAPPT36', 'SSAAPPT38'=>'25SSAAPPT38', 'SSAAPPT40'=>'25SSAAPPT40', 'SSAAPPT42'=>'25SSAAPPT42', 'SSAAPPT44'=>'25SSAAPPT44', 'SSAAPPT46'=>'25SSAAPPT46',
+
+        //-- CHECK 2
+        //무영
+        'MSMUY001' => '25SFMYCJK100',
+        'MSMUY002' => '25SFMYCJK105',
+        'MSMUY003' => '25SFMYCJK110',
+        'MSMUY004' => '25SFMYCJK115',
+        'MSMUY005' => '25SFMYCJK90',
+        'MSMUY006' => '25SFMYCJK95',
+
+        //-- [ 한국타이어 ]
+        //한국타이어TS하계카라티
+        '24SSMHANPOTS95'=>'25SSHANPOTS95','24SSMHANPOTS100'=>'25SSHANPOTS100','24SSMHANPOTS105'=>'25SSHANPOTS105','24SSMHANPOTS115'=>'25SSHANPOTS115','24SSMHANPOTS110'=>'25SSHANPOTS110',
+        //한타TS하계바지
+        'MSTSTB03'=>'25SSHANPTTS32',
+        '24SSMHANPTTS30'=>'25SSHANPTTS30','24SSMHANPTTS38'=>'25SSHANPTTS38',
+        '24SSMHANPTTS32'=>'25SSHANPTTS32','MSTSTB05'=>'24SSMHANPTTS36','24SSMHANPTTS36'=>'25SSHANPTTS36','MSTSTB07'=>'24SSMHANPTTS40',
+        //한타HK하계카라티
+        '24SSMHANTSHK90'=>'25SSHANTSHK90','MSHKSC39'=>'25SSHANTSHK105','24SSMHANTSHK120'=>'25SSHANTSHK120',
+        //한타HK하계바지
+        '24SSMHANPTHK28'=>'25SSHANPTHK28','MSHKSB03'=>'25SSHANPTHK32','MSHKSB04'=>'25SSHANPTHK34','24SSMHANPTHK36'=>'25SSHANPTHK36','MSHKSB06'=>'24SSMHANPTHK38','MSHKSB07'=>'25SSHANPTHK40','24SSMHANPTHK30'=>'25SSHANPTHK30',
+        '24SSMHANPTHK34'=>'25SSHANPTHK34',
+
+
+        //-- CHECK 3
+
+        //한국타이어 HK 춘추 점퍼
+        '24SFHANJPHK90'=>'25SFHANJPHK90','24SFHANJPHK95'=>'25SFHANJPHK95','24SFHANJPHK100' => '25SFHANJPHK100', 'MSHKSC11'=>'24SFHANJPHK105', '24SFHANJPHK110'=> '25SFHANJPHK110', '24SFHANJPHK115' => '25SFHANJPHK115',
+        //한국타이어 TS 춘추 점퍼
+        'MSTSTC43' => '24SFMHANJPTS90',
+        '24SFMHANJPTS90' => '25SFHANJPTS90', //미리작업
+        '24SFMHANJPTS95' => '25SFHANJPTS95', 'MSTSTC44' => '25SFHANJPTS95',  '24SFMHANJPTS100' => '25SFHANJPTS100',  '24SFMHANJPTS105' => '25SFHANJPTS105', '24SFMHANJPTS110'=>'25SFHANJPTS110', '24SFMHANJPTS115' => '25SFHANJPTS115','24SFMHANJPTS120' => '25SFHANJPTS120',
+
+        //한국타이어 HK 춘추 카리티
+        '24SFHANPOHK90' => '24SFMHANTSHK90',
+        '24SFMHANTSHK90' => '25SFHANPOHK90', //미리작업
+        '24SFMHANTSHK95' => '25SFHANPOHK95','24SFHANPOHK100' => '25SFHANPOHK100',
+        '24SFHANPOHK95' => '25SFHANPOHK95','24SFMHANTSHK100'=>'25SFHANPOHK100', 'MSHKSC04'=> '24SFMHANTSHK105', '24SFHANPOHK110' => '25SFHANPOHK110', '24SFMHANTSHK110' => '25SFHANPOHK110', '24SFHANPOHK115' => '24SFMHANTSHK115',
+
+        //한국타이어 TS 춘추 카리티
+        'MSTSTC15' => '24SFHANPOTS90', '24SFHANPOTS105' => '25SFHANPOTS105','24SFHANPOTS110'=>'25SFHANPOTS110','24SFHANPOTS115'=>'25SFHANPOTS115',
+        //한국타이어 TS 춘추 바지
+        '24SFHANPTTS28' => '25SFHANPTTS28',
+        '24SFHANPTTS32' => '25SFHANPTTS32', '24SFHANPTTS36'=>'25SFHANPTTS36', 'MSTSTB13'=>'25SFHANPTTS38','24SFHANPTTS40'=>'25SFHANPTTS40','24SFHANPTTS34'=>'25SFHANPTTS34',
+        //한국타이어 HK 춘추 바지
+        '24SFHANPTHK28' => '25SFHANPTHK_28','24SFHANPTHK30' => '25SFHANPTHK_30','24SFHANPTHK32' => '25SFHANPTHK_32','MSHKSB11' => '24SFHANPTHK34','MSHKSB12'=>'24SFHANPTHK36','24SFHANPTHK38'=>'25SFHANPTHK_38','MSHKSB14'=>'25SFHANPTHK_40',
+
+        //한국타이어 HK 동계 바지
+        'MSHKSB21' => '24FWMHANPTHK40',
+        //한국타이어 HK 동계 점퍼
+        'MSHKS038' => '24FWMHANJPHK90',
+
+        //-- CHECK 4
+
+        //TKE하계 카라티
+        '24SSMTKEPOS85'=>'25SSMTKEPO85','24SSMTKEPOS90'=>'25SSMTKEPO90','24SSMTKEPOS95'=>'25SSMTKEPO95','24SSMTKEPOS110'=>'25SSMTKEPO110','24SSMTKEPOS115'=>'25SSMTKEPO115','24SSMTKEPOS120'=>'25SSMTKEPO120','24SSMTKEPOS125'=>'25SSMTKEPO125',
+        //TKE하계 바지
+        '24SSMTKEPT24'=>'25SSMTKEPT24','24SSMTKEPT32'=>'25SSMTKEPT32','24SSMTKEPT42'=>'24SSMTKEPTP42',
+
+        '25SSMTKEPT28'=>'25SSMTKEPT28P','25SSMTKEPT30'=>'25SSMTKEPT30P','25SSMTKEPT32'=>'25SSMTKEPT32P','25SSMTKEPT34'=>'25SSMTKEPT34P','25SSMTKEPT40'=>'25SSMTKEPT40P','25SSMTKEPT44'=>'24SSMTKEPTP44',
+
+        //빙그레
+        '24SSBINGPO285'=>'25SSBGEPO85','24SSBINGPO290'=>'25SSBGEPO90','24SSBINGPO295'=>'25SSBGEPO95','24SSBINGPO2100'=>'25SSBGEPO100','24SSBINGPO2105'=>'25SSBGEPO105','24SSBINGPO2110'=>'25SSBGEPO110','24SSBINGPO2115'=>'25SSBGEPO115','24SSBINGPO2120'=>'25SSBGEPO120','24SSBINGPO2125'=>'25SSBGEPO125',
+        //빙그레 동점퍼
+
+
+        //혼다동계팬츠
+        'MSHON050' => '25FWHANDAKPT26','MSHON029' => '25FWHANDAKPT28','MSHON030' => '25FWHANDAKPT30','MSHON031' => '25FWHANDAKPT32','MSHON032' => '25FWHANDAKPT34','MSHON033' => '25FWHANDAKPT36','MSHON034' => '25FWHANDAKPT38',
+        //혼다춘추점퍼(바람막이)
+        'MSHON042' => '25FWHDKJK85','MSHON008' => '25FWHDKJK90','MSHON009' => '25FWHDKJK95','MSHON010' => '25FWHDKJK100','MSHON011' => '25FWHDKJK105',
+        //혼다반팔셔츠
+        'MSHON022' => '25SSHONDAKPO90','MSHON023' => '25SSHONDAKPO95','MSHON024' => '25SSHONDAKPO100','MSHON025'=>'25SSHONDAKPO105',
+        //혼다 긴팔셔츠
+        'MSHON043' => '25SFHONDAKPO85','MSHON015' => '25SFHONDAKPO90','MSHON016' => '25SFHONDAKPO95','MSHON017' => '25SFHONDAKPO100','MSHON018' => '25SFHONDAKPO105',
+        //혼다 3계절팬츠
+        'MSHON035' => '25SFHONDAKPT28','MSHON036' => '25SFHONDAKPT30','MSHON037' => '25SFHONDAKPT32','MSHON038' => '25SFHONDAKPT34',
+        'MSHON041' => '25FWHDKJP85',
+        'MSHON001' => '25FWHDKJP90',
+        'MSHON002' => '25FWHDKJP95',
+        'MSHON003' => '25FWHDKJP100',
+        'MSHON004' => '25FWHDKJP105',
+    ];
+
+
+}

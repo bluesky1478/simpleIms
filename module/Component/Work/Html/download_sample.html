@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<head>
+    <title>Excel Download</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        br{mso-data-placement:same-cell;}
+        .number-format1{mso-number-format:"0_\)\;\\\(0\\\)";}
+        .number-format2{mso-number-format:"\@";}
+        .title{font-weight:bold; background-color:#F6F6F6; text-align:center;}
+        .text-center{text-align: center}
+    </style>
+</head>
+<body>
+<table border="1" style="width:900px">
+    <colgroup>
+        <col style="width:150px" />
+        <col style="width:150px" />
+        <col style="width:150px" />
+        <col style="width:150px" />
+        <col style="width:150px" />
+        <col style="width:150px" />
+    </colgroup>
+    <td class="text-center" colspan="6" height="20px">
+        <b style="font-size:15px;">샘플 지시서</b>
+    </td>
+    <tr>
+        <th class="title">S/#</th>
+        <td colspan="5">{% serial %}</td>
+    </tr>
+    <tr>
+        <th class="title">시즌</th>
+        <td>{% season %}</td>
+        <th class="title">생산처</th>
+        <td>{% companyName %}</td>
+        <th class="title">작성일</th>
+        <td>{% regDt %}</td>
+    </tr>
+    <tr>
+        <th class="title">제품명</th>
+        <td>{% productName %}</td>
+        <th class="title">생산구분</th>
+        <td>{% produceType %}</td>
+        <th class="title">의뢰일</th>
+        <td>{% requestDt %}</td>
+    </tr>
+    <tr>
+        <th class="title">성별</th>
+        <td>{% specType %}</td>
+        <th class="title">제조국</th>
+        <td>{% produceCountry %}</td>
+        <th class="title">납기일</th>
+        <td>{% completeDt %}</td>
+    </tr>
+    <tr>
+        <td colspan="6" style="height:500px; " >
+            {% sampleImage %}
+        </td>
+    </tr>
+    {% sampleFabric %}
+    <tr >
+        <th colspan=6 class="title">완성 제품 사이즈 스펙</th>
+    </tr>
+    <tr >
+        <th class="title">사이즈</th>
+        <td class="text-center" colspan=2 >{% sampleSize %}</td>
+        <th class="title">단위</th>
+        <td class="text-center" colspan=2>{% specUnit %}</td>
+    </tr>
+    <tr >
+        <th class="title">구분</th>
+        <th class="title">{% sampleSize %}</th>
+        <td ></td>
+        <th colspan=3 class="title">측정부위</th>
+    </tr>
+    {% sampleSpecList %}
+    <tr >
+        <td colspan=6 class="title">기타</td>
+    </tr>
+    <tr >
+        <td colspan=6 rowspan=8 >{% etc %}</td>
+    </tr>
+</table>
+</body>
+</html>

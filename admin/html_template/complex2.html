@@ -1,0 +1,15 @@
+<div v-show="!isModify">
+    {% $.formatShortDate({model}) %}
+    {% {model2} %}
+</div>
+
+<!--날짜 / 텍스트(place holder)-->
+<div v-show="isModify">
+    <div>
+        <div class="dp-flex">
+            <date-picker v-model="{model}" value-type="format" :editable="false" ></date-picker>
+            <div class="mgl10 w80p">{key2Desc}</div>
+            <input type="text" class="form-control mgt5" v-model="{model2}" placeholder="{key2Desc}">
+        </div>
+    </div>
+</div>

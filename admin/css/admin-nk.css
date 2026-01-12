@@ -1,0 +1,16 @@
+/* ------------ 인남규 팀장님 CSS */
+/* 일괄작업 td */
+.tr_multi_value_change > td { background-color: rgb(255, 253, 242); }
+.tr_multi_value_change > td > select { background: #fff; }
+
+/* 박스형리스트(가로 5개) start */
+.box_list { width:100%; font-size:0px; }
+.box_list > li { display: inline-block; width:20%; margin-bottom:20px; }
+.box_list > li > div { width:94%; margin:0px auto; text-align: center; }
+.box_list > li > div > div:nth-child(1) {  height:380px; line-height: 380px; vertical-align: middle; border: 1px #ddd solid; overflow: hidden; }
+.box_list > li > div > div:nth-child(1) > img { max-width:100%; max-height:380px; }
+.box_list > li > div > div:nth-child(2) { margin-top:10px; }
+.box_list > li > div > div:nth-child(2),
+.box_list > li > div > div:nth-child(3) { font-size:18px; line-height:30px; }
+.box_list > li > div > div:nth-child(3) { font-weight:bold; }
+/* 박스형리스트(가로 5개) end */

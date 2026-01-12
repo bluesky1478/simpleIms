@@ -1,0 +1,12 @@
+<div class="" >
+    <div v-show="isModify">
+        <label class="radio-inline" v-for="(eachValue, eachKey) in getCodeMap()['{listCode}']">
+            <input type="radio" :name="'project-added-info-{key}'"  :value="eachKey" v-model="{model}" />
+            <span class="font-12">{%eachValue%}</span>
+        </label>
+    </div>
+
+    <div v-show="!isModify">
+        {% getCodeMap()['{listCode}'][{model}] %}
+    </div>
+</div>

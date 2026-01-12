@@ -1,0 +1,18 @@
+<div v-show="!isModify">
+    {% {model} %}
+    {% {model2} %}
+</div>
+
+<!-- 텍스트 / 텍스트 -->
+<div v-show="isModify">
+    <div>
+        <div class="dp-flex">
+            <!--<div class="w150p">{keyDesc} :</div>-->
+            <input type="text" class="form-control" v-model="{model}" placeholder="{keyDesc}">
+        </div>
+        <div class="dp-flex mgt5">
+            <!--<div class="w150p">{key2Desc} :</div>-->
+            <input type="text" class="form-control" v-model="{model2}" placeholder="{key2Desc}">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,269 @@
+<?php
+
+/**
+ * This is commercial software, only users who have purchased a valid license
+ * and accept to the terms of the License Agreement can install and use this
+ * program.
+ *
+ * Do not edit or add to this file if you wish to upgrade Godomall5 to newer
+ * versions in the future.
+ *
+ * @copyright ⓒ 2016, NHN godo: Corp.
+ * @link http://www.godo.co.kr
+ */
+namespace Controller\Admin\Order;
+
+use App;
+use Component\Claim\ClaimListService;
+use Component\Erp\ErpService;
+use Component\Scm\ScmTkeService;
+use Component\Sitelab\SiteLabDownloadUtil;
+use Exception;
+use Request;
+use Framework\Debug\Exception\LayerNotReloadException;
+use Framework\Debug\Exception\LayerException;
+use SiteLabUtil\SlCommonUtil;
+use SlComponent\Database\DBUtil;
+use SlComponent\Database\DBUtil2;
+use SlComponent\Database\SearchVo;
+use SlComponent\Util\ExcelCsvUtil;
+use SlComponent\Util\SlLoader;
+
+/**
+ * 주문 첨부파일 다운로드
+ *
+ * @package Bundle\Controller\Admin\Order
+ * @author  su
+ */
+class DownloadTkeReleaseController extends \Controller\Admin\Controller{
+
+    const OPTION_LIST = [
+        '90(S)','95(M)','100(L)','105(XL)','110(2XL)','115(3XL)','120(4XL)','125(5XL)',
+        '28','30','32','34','36','38','40'
+    ];
+
+    private $IDX = 1;
+
+    public function index(){
+        //gd_debug('출고리스트 뻡기');
+        $getValue = \Request::get()->toArray();
+        if( !empty($getValue['mode']) && 'partner' === $getValue['mode'] ){
+            $list = $this->getList( '1000000409' , '1000000416' ); //24하계 파트너
+            $div = "파트너";
+        }else{
+            //$list = $this->getList( '1000000409' , '1000000416' );//OEK
+            $list = $this->getList( '1000000408' , '1000000414' );//OEK
+            $div = "정직원";
+        }
+
+        $refineList = [];
+        SlCommonUtil::setEachData($list, $this, 'setEach', $refineList);
+        $this->makeExcel($refineList, $div);
+        //gd_debug($refineList);
+
+        exit();
+    }
+
+    public function makeExcel($refineList, $div){
+
+        $goodsTitle1 = '동계점퍼';
+        $goodsTitle2 = '기모바지';
+
+        $totalCnt = 20;
+        $addCnt = 2;
+        $dpCnt = $totalCnt + $addCnt;
+
+        $fileTitle = "FOD출고패킹리스트_".date('Y-m-d');
+
+        $optionList = DownloadTkeReleaseController::OPTION_LIST;
+
+        $htmlList = [];
+        $htmlList[] = '<table class="table table-rows" border="1">';
+
+        $htmlList[] = '<tr>';
+        //$htmlList[] = ExcelCsvUtil::wrapTh($fileTitle,'title','background-color:#ffffff; font-weight:bold; font-size:20px','colspan=24');
+        //$htmlList[] = ExcelCsvUtil::wrapTh($fileTitle,'title','background-color:#ffffff; font-weight:bold; font-size:20px','colspan=13');
+        $htmlList[] = ExcelCsvUtil::wrapTh($fileTitle,'title','background-color:#ffffff; font-weight:bold; font-size:20px','colspan='.$dpCnt);
+        $htmlList[] = '</tr>';
+
+        $htmlList[] = '<tr>';
+        $htmlList[] = ExcelCsvUtil::wrapTh('번호','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+        $htmlList[] = ExcelCsvUtil::wrapTh($goodsTitle1,'title','background-color:#d9e1f2; font-weight:bold','colspan=8'); //FIXME
+        $htmlList[] = ExcelCsvUtil::wrapTh($goodsTitle2,'title','background-color:#fff2cc; font-weight:bold','colspan=7'); //FIXME
+        $htmlList[] = ExcelCsvUtil::wrapTh('점퍼+바지 합계','title','background-color:#fff2cc; font-weight:bold','rowspan=2');
+        //$htmlList[] = ExcelCsvUtil::wrapTh('구분','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+
+        $htmlList[] = ExcelCsvUtil::wrapTh('ID','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+        $htmlList[] = ExcelCsvUtil::wrapTh('닉네임','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+
+        $htmlList[] = ExcelCsvUtil::wrapTh('수령자','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+        $htmlList[] = ExcelCsvUtil::wrapTh('연락처','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+        $htmlList[] = ExcelCsvUtil::wrapTh('배송지 주소','title','background-color:#f0f0f0; font-weight:bold','rowspan=2');
+        $htmlList[] = '</tr>';
+        $htmlList[] = '<tr>';
+        foreach( $optionList as $option ){
+            if($option > 80){
+                $htmlList[] = ExcelCsvUtil::wrapTh($option,'title','background-color:#d9e1f2; font-weight:bold');
+            }else{
+                $htmlList[] = ExcelCsvUtil::wrapTh($option,'title','background-color:#fff2cc; font-weight:bold');
+            }
+        }
+        $htmlList[] = '</tr>';
+
+        SlCommonUtil::setEachData($refineList, $this, 'setExcelEach', $htmlList);
+
+        $totalData = [];
+        SlCommonUtil::setEachData($refineList, $this, 'setExcelTotalEach', $totalData);
+        //gd_debug($totalData);
+
+        $htmlList[] = ExcelCsvUtil::wrapTh('TOTAL','title','background-color:#f0f0f0; font-weight:bold');
+        foreach( $optionList as $option ){
+            if($option > 80){
+                $htmlList[] = ExcelCsvUtil::wrapTh($totalData[$option],'title','background-color:#d9e1f2; font-weight:bold');
+            }else{
+                $htmlList[] = ExcelCsvUtil::wrapTh($totalData[$option],'title','background-color:#fff2cc; font-weight:bold');
+            }
+        }
+
+        $htmlList[] = ExcelCsvUtil::wrapTh(number_format($totalData['total']),'title','background-color:#f0f0f0; font-weight:bold; color:red');
+        $htmlList[] = ExcelCsvUtil::wrapTh('점퍼:'.number_format($totalData['tee']).'개','title','background-color:#f0f0f0; font-weight:bold');
+        $htmlList[] = ExcelCsvUtil::wrapTh('바지:'.number_format($totalData['pants']).'개','title','background-color:#f0f0f0; font-weight:bold');
+
+        $htmlList[] = '</table>';
+
+        $excelBody =  implode('',$htmlList);
+
+        $simpleExcelComponent = SlLoader::cLoad('Excel','SimpleExcelComponent','sl');
+        $simpleExcelComponent->downloadCommon($excelBody, $fileTitle);
+    }
+
+    public function setExcelTotalEach($val, $key, &$totalData){
+        foreach($val['option'] as $option => $optionData){
+            $totalData['total'] += $optionData;
+            if( $option > 80 ){
+                $totalData['tee'] += $optionData;
+            }else{
+                $totalData['pants'] += $optionData;
+            }
+            $totalData[$option] += $optionData;
+        }
+    }
+
+    public function setExcelEach($val, $key, &$htmlList){
+        $htmlList[] = '<tr>';
+        $optionList = DownloadTkeReleaseController::OPTION_LIST;
+        $htmlList[] = ExcelCsvUtil::wrapTd($this->IDX++, '', 'text-align:center');
+        $eachTotal = 0;
+        foreach( $optionList as $option ){
+            if(!empty($val['option'][$option])){
+                $htmlList[] = ExcelCsvUtil::wrapTd(number_format($val['option'][$option]), '', 'text-align:center');
+            }else{
+                $htmlList[] = ExcelCsvUtil::wrapTd('', '', 'text-align:center');
+            }
+            $eachTotal += $val['option'][$option];
+        }
+
+        //$htmlList[] = ExcelCsvUtil::wrapTd($val['info']['grade'], '', 'text-align:center');
+        $htmlList[] = ExcelCsvUtil::wrapTd($eachTotal, '', 'text-align:center; font-weight:bold; color:red'); //,'background-color:#f0f0f0; font-weight:bold; color:red'
+
+        $htmlList[] = ExcelCsvUtil::wrapTd($val['info']['memId'], '', 'text-align:center');
+        $htmlList[] = ExcelCsvUtil::wrapTd($val['info']['nickNm'], '', 'text-align:center');
+
+        $htmlList[] = ExcelCsvUtil::wrapTd($val['info']['receiver'], '', 'text-align:center');
+        $htmlList[] = ExcelCsvUtil::wrapTd($val['info']['cellPhone'],'text','mso-number-format:\'\@\'');
+        $htmlList[] = ExcelCsvUtil::wrapTd($val['info']['address'], '', 'width:550px');
+
+        $htmlList[] = '</tr>';
+    }
+
+
+    public function setEach($each, $key, &$mixData){
+        $address = $each['receiverAddress'].(empty($each['receiverAddressSub']) || '-' === $each['receiverAddressSub'] ? '': ' '.$each['receiverAddressSub']);
+        $receiver = $each['receiverName'];
+        $cellPhone = $each['receiverCellPhone'];
+        $optionValue = $each['optionValue1'];
+
+        //키 만들기.
+        $key = md5($receiver.$address.$cellPhone);
+        $mixData[$key]['info'] = [
+            'nickNm' => $each['nickNm'],
+            'memId'  => $each['memId'],
+            'receiver' => $receiver,
+            'cellPhone' => $cellPhone,
+            'address' => $address,
+            'grade' => $each['groupNm'],
+        ];
+        $mixData[$key]['option'][$optionValue] += $each['goodsCnt'];
+    }
+
+
+    public function getList($teeCode, $pantsCode){
+
+        $sql = "
+            select
+                a.goodsNo, 
+                optionValue1,
+                goodsCnt,
+                e.memId,
+                e.nickNm,
+                receiverName,
+                receiverCellPhone,
+                receiverAddress, 
+                receiverAddressSub,
+                f.groupNm
+            from es_orderGoods a
+            join es_order b 
+              on a.orderNo = b.orderNo 
+            join es_goodsOption c
+              on c.sno = a.optionSno
+            join es_orderInfo d 
+              on b.orderNo = d.orderNo
+            join es_member e 
+              on b.memNo = e.memNo 
+            join es_memberGroup f    
+              on e.groupSno = f.sno
+            join sl_orderAccept g  
+              on a.orderNo = g.orderNo  
+            where 1=1
+            and orderAcctStatus = 2
+            and ( a.orderStatus = 'p1' or a.orderStatus = 'p3' ) 
+            and a.goodsNo in ( 
+            '{$teeCode}' 
+            , '{$pantsCode}'
+        ) order by receiverAddress, receiverName";
+
+        return DBUtil2::runSelect($sql);
+    }
+
+    public function getList2(){
+
+        $searchData = $commonData['searchData'];
+        $searchVo  = $commonData['searchVo'];;
+
+        $filedList = [
+            'a.productSno',
+            'a.thirdPartyProductCode',
+            'a.inOutType',
+            'a.inOutReason',
+            'a.inOutDate',
+        ];
+        $tableList= [
+            'a' => //메인
+                [
+                    'data' => [ 'sl_3plStockInOut' ]
+                    , 'field' => array_merge($filedList, ['sum(a.quantity) as quantity'])
+                ]
+            , 'b' => //상품 정보
+                [
+                    'data' => [ 'sl_3plProduct', 'JOIN', 'a.productSno = b.sno' ]
+                    , 'field' => ['b.productName', 'b.optionName', 'b.scmName']
+                ]
+        ];
+        $table = DBUtil2::setTableInfo($tableList, false);
+        $searchVo->setGroup( implode(',',array_merge($filedList, $tableList['b']['field'])));
+        //정렬 설정
+        $searchVo->setOrder($searchData['sort']);
+
+    }
+
+}
